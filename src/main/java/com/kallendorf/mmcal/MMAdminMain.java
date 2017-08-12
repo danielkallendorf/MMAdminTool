@@ -2,7 +2,6 @@ package com.kallendorf.mmcal;
 
 import java.awt.EventQueue;
 import java.io.File;
-import java.io.FilePermission;
 
 import com.kallendorf.mmcal.gui.MmGui;
 
@@ -17,16 +16,13 @@ public class MMAdminMain {
 		for (int i = 0; i < args.length; i++) {
 			
 			if (args[i].equalsIgnoreCase("dbg")) {
-				System.setProperty("http.proxyHost", "127.0.0.1");
-				System.setProperty("http.proxyPort", "8888");
-				System.setProperty("https.proxyHost", "127.0.0.1");
-				System.setProperty("https.proxyPort", "8888");
+				setDebugServer();
 			} else if (args[i].startsWith("file=")) {
 				filepath=args[i].substring(5);
-			} else if (args[i].startsWith("old=")) {
-				String numStr = args[i].substring(4);
-				File file = new File("MMCal_r" + numStr + ".jar");
-				file.deleteOnExit();
+			} else if (args[i].startsWith("remove=")) {
+				Updater.deletOldFile(args[i].substring(7));
+			} else if (args[i].startsWith("new=")) {
+				Updater.createVersionFile(args[i].substring(4));
 			}
 		}
 		
@@ -39,6 +35,15 @@ public class MMAdminMain {
 				if(file.exists())
 					gui.setCurrentPlanFromFile(file);
 			}
-		});
+		});		
 	}
+	
+	private static void setDebugServer(){
+		System.setProperty("http.proxyHost", "127.0.0.1");
+		System.setProperty("http.proxyPort", "8888");
+		System.setProperty("https.proxyHost", "127.0.0.1");
+		System.setProperty("https.proxyPort", "8888");
+	}
+	
+	
 }
