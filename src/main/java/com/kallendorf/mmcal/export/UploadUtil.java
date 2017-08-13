@@ -71,9 +71,9 @@ public class UploadUtil {
 	}
 
 	public static ObjectGoDi GoDifromEvent(Event e) {
-		ExtendedProperties ep=e.getExtendedProperties();
-		Map<String,String> map;
-		if (ep != null&&(map=ep.getPrivate())!=null) {
+		ExtendedProperties ep = e.getExtendedProperties();
+		Map<String, String> map;
+		if (ep != null && (map = ep.getPrivate()) != null) {
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0; map.containsKey(OBJKEY + i); i++) {
 				sb.append(map.get(OBJKEY + i));
@@ -132,6 +132,16 @@ public class UploadUtil {
 		ep.setPrivate(privMap);
 		e.setExtendedProperties(ep);
 
+		StringBuilder description = new StringBuilder();
+		if (o.getDescription()!=null &&o.getDescription().length()>0)
+			description.append(o.getDescription()).append("\n\n");
+		for (ObjectDienst od : o.getDienste()) {
+			description.append(od.getDisplayName()).append('\n');
+			for (String name : od.getPersons()) {
+				description.append('\t').append(name).append('\n');
+			}
+		}
+		e.setDescription(description.toString());
 		return e;
 	}
 
