@@ -40,12 +40,12 @@ public class UploadPanelPlan extends JFrame {
 
 		spinnerStart = new JSpinner();
 		spinnerStart.setModel(
-				new SpinnerDateModel(new Date(), new Date(946681200000L), null, Calendar.DAY_OF_YEAR));
+				new SpinnerDateModel(new Date(954972000000L), new Date(946681200000L), null, Calendar.DAY_OF_YEAR));
 		topBar.add(spinnerStart);
 
 		spinnerEnd = new JSpinner();
 		spinnerEnd.setModel(
-				new SpinnerDateModel(new Date(), new Date(946681200000L), null, Calendar.DAY_OF_YEAR));
+				new SpinnerDateModel(new Date(955058400000L), new Date(946681200000L), null, Calendar.DAY_OF_YEAR));
 		topBar.add(spinnerEnd);
 
 		JButton btnReset = new JButton("Reset");
