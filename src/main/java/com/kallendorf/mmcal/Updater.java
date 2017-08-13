@@ -4,7 +4,6 @@ import java.awt.Frame;
 import java.awt.HeadlessException;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,19 +21,13 @@ import com.kallendorf.mmcal.options.OptionsHandler;
 public class Updater {
 
 	private static String[] lastFileContents;
-	private static String versionFile="Version.txt";
 
-	
-	public static int getCurrentVersion() throws IOException {
-		File versionTxt= new File(versionFile);
-		if(!versionTxt.exists()){	
-			return 0;
-		}
-		BufferedReader b= new BufferedReader(new InputStreamReader(new FileInputStream(versionTxt)));
-		String versionString=b.readLine();
-		b.close();
-		int version=Integer.parseInt(versionString);
-		return version;
+	public static int getCurrentVersion() throws URISyntaxException {
+		File jar = new File(MMAdminMain.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+		String jarName = jar.getName();
+		String thisVersString = jarName.substring(7, jarName.length() - 4);
+		System.out.println("thisVersString: " + thisVersString);
+		return Integer.valueOf(thisVersString);
 	}
 
 	public static int getUpdateVersion() throws IOException {
@@ -73,7 +66,7 @@ public class Updater {
 			int n = JOptionPane.showConfirmDialog(frame, "Neue Version gefunden \n" + "Jetzt installieren?",
 					"Update: " + getCurrentVersion() + "\u2192" + getUpdateVersion(), JOptionPane.OK_CANCEL_OPTION);
 			return n;
-		} catch (HeadlessException | IOException e) {
+		} catch (HeadlessException | URISyntaxException | IOException e) {
 			e.printStackTrace();
 		} finally {
 			frame.dispose();
@@ -86,9 +79,10 @@ public class Updater {
 			if (getUpdateVersion() > getCurrentVersion()) {
 				if (askForUpdate() == JOptionPane.YES_OPTION) {
 					MMAdminMain.gui.dispose();
-					download(getURL(), new File("MMCal.jar"));
-					removeVersionTxt();
-					lanuchNextInstance(MMAdminMain.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString(),getUpdateVersion());
+
+					download(getURL(), new File("MMCal_r" + getUpdateVersion() + ".jar"));
+					patchBatch(getUpdateVersion());
+					lanuchNextInstance(getCurrentVersion(), getUpdateVersion());
 				}
 			}
 		} catch (IOException | URISyntaxException e) {
@@ -107,33 +101,16 @@ public class Updater {
 		cOut.close();
 	}
 
-	private static void lanuchNextInstance(String oldJar, int nextVersion) throws IOException {
-		String command = "java -jar MMCal.jar -remove=" + oldJar + " -new="+ nextVersion;
+	private static void patchBatch(int to) throws IOException {
+		File bat = new File("start.bat");
+		FileWriter batfw = new FileWriter(bat);
+		batfw.write("java -jar MMCal_r" + to + ".jar");
+		batfw.close();
+	}
+
+	private static void lanuchNextInstance(int old, int next) throws IOException {
+		String command = "java -jar MMCal_r" + next + ".jar -old=" + old;
 		Runtime.getRuntime().exec(command);
 		System.exit(0);
 	}
-	
-	private static void removeVersionTxt(){
-		File f=new File(versionFile);
-		f.delete();
-	}
-	
-	static void createVersionFile(String version){
-		File f= new File(versionFile);
-		f.delete();
-		try {
-			f.createNewFile();
-			FileWriter w= new FileWriter(f);
-			w.write(version);
-			w.close();
-		} catch (IOException e) {			
-			e.printStackTrace();
-		}	
-	}
-	
-	static void deletOldFile(String filename){
-		File file = new File(filename);
-		file.delete();
-	}
-	
 }
