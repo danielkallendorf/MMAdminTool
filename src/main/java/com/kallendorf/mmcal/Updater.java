@@ -86,9 +86,9 @@ public class Updater {
 			if (getUpdateVersion() > getCurrentVersion()) {
 				if (askForUpdate() == JOptionPane.YES_OPTION) {
 					MMAdminMain.gui.dispose();
-					download(getURL(), new File("MMCal.jar"));
+					download(getURL(), new File("MMCal_r"+getUpdateVersion()+".jar"));
 					removeVersionTxt();
-					lanuchNextInstance(MMAdminMain.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString(),getUpdateVersion());
+					launchNextInstance(MMAdminMain.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString(),getUpdateVersion());
 				}
 			}
 		} catch (IOException | URISyntaxException e) {
@@ -107,9 +107,10 @@ public class Updater {
 		cOut.close();
 	}
 
-	private static void lanuchNextInstance(String oldJar, int nextVersion) throws IOException {
-		String command = "java -jar MMCal.jar -remove=" + oldJar + " -new="+ nextVersion;
+	private static void launchNextInstance(String oldJar, int nextVersion) throws IOException {
+		String command = "java -jar MMCal.jar remove=" + oldJar + " new="+ nextVersion;
 		Runtime.getRuntime().exec(command);
+		System.out.println("Starting:"+command);
 		System.exit(0);
 	}
 	

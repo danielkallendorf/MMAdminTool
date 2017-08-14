@@ -75,7 +75,7 @@ public class MmGui extends JFrame {
 
 		});
 
-		setTitle("MM Plan Creator 2 - Version 20");
+		setTitle("MM Plan Creator 2 - Version 21");
 
 		menuBar.add(createMenuData());
 		menuBar.add(createMenuTemplates());
