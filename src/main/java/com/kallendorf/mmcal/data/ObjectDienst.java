@@ -28,7 +28,12 @@ public class ObjectDienst {
 
 	public ObjectDienst(TemplateDienst t) {
 		this();
-		this.setListName(t.getListName()).setDisplayName(t.getDisplayName());
+		setListName(t.getListName());
+		String dsp = t.getDisplayName();
+		if(dsp==null||dsp.equals(""))
+			dsp=getListName();
+		setDisplayName(dsp);
+		
 		for (int i = 0; i < t.getSize(); i++) {
 			persons.add("");
 		}

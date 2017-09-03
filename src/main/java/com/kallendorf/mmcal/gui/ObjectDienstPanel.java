@@ -139,6 +139,10 @@ public class ObjectDienstPanel extends AbstractHolderPanelComponent<ObjectDienst
 	
 		TemplateDienst t = (TemplateDienst) comboBox.getSelectedItem();
 		ObjectDienst obj = new ObjectDienst(t);
+		
+		if(!textField.getText().equals(""))
+			obj.setDisplayName(textField.getText());
+		
 		obj.setPersons(panelPers.generateItems());
 		return obj;
 	}

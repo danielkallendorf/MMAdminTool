@@ -239,17 +239,22 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 	public ObjectGoDi get() {
 		TemplateGoDi t = (TemplateGoDi) comboBox.getSelectedItem();
 
-		ObjectGoDi o = new ObjectGoDi(t);
+		ObjectGoDi obj = new ObjectGoDi(t);
+		
+		if(!textFieldName.getText().equals(""))
+			obj.setDisplayName(textFieldName.getText());
+		
 		Date d = (Date) spinnerDate.getValue();
 		LocalDateTime ldt = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-		o.setStart(ldt);
-		o.setDuration(t.getDuration());
-		o.setDienste(panelHold.generateItems());
+		obj.setStart(ldt);
+		obj.setDuration(t.getDuration());
+		
+		obj.setDienste(panelHold.generateItems());
 		String txt = txtDescr.getText();
 		if (txt.equals("") || !txtDescr.isEnabled())
 			txt = null;
-		o.setDescriptionText(txt);
-		return o;
+		obj.setDescriptionText(txt);
+		return obj;
 	}
 
 }

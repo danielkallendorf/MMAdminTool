@@ -27,7 +27,13 @@ public class ObjectGoDi {
 
 	public ObjectGoDi(TemplateGoDi t) {
 		this();
-		setListName(t.getListName()).setDisplayName(t.getDisplayName());
+		setListName(t.getListName());
+		
+		String dsp = t.getDisplayName();
+		if(dsp==null||dsp.equals(""))
+			dsp=getListName();
+		setDisplayName(dsp);
+		
 		if (t.getStartDay() != null)
 			start=start.with(t.getStartDay());
 		if (t.getStartTime() != null)
