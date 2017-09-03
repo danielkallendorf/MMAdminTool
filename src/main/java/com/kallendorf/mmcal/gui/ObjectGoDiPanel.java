@@ -101,12 +101,12 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 		add(btnDel, gbc_btnDel);
 
 		textFieldName = new JTextField();
-		GridBagConstraints gbc_txtAlternativtext = new GridBagConstraints();
-		gbc_txtAlternativtext.insets = new Insets(0, 0, 5, 5);
-		gbc_txtAlternativtext.fill = GridBagConstraints.HORIZONTAL;
-		gbc_txtAlternativtext.gridx = 0;
-		gbc_txtAlternativtext.gridy = 1;
-		add(textFieldName, gbc_txtAlternativtext);
+		GridBagConstraints gbc_textFieldName = new GridBagConstraints();
+		gbc_textFieldName.insets = new Insets(0, 0, 5, 5);
+		gbc_textFieldName.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textFieldName.gridx = 0;
+		gbc_textFieldName.gridy = 1;
+		add(textFieldName, gbc_textFieldName);
 		textFieldName.setColumns(10);
 
 		panelHold = new AbstractHolderPanel<ObjectDienstPanel, ObjectDienst>() {
@@ -179,7 +179,7 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 		btnEdit.setToolTipText("Dauer: " + comboBox.getSelectedItem());
 
 		txtDescr = new JTextField();
-		txtDescr.setText("Alternativtext");
+		txtDescr.setToolTipText("Alternativtext");
 		GridBagConstraints gbc_txtDescr = new GridBagConstraints();
 		gbc_txtDescr.insets = new Insets(0, 0, 5, 5);
 		gbc_txtDescr.fill = GridBagConstraints.HORIZONTAL;
@@ -248,7 +248,7 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 		String txt = txtDescr.getText();
 		if (txt.equals("") || !txtDescr.isEnabled())
 			txt = null;
-		o.setDescriptionText(null);
+		o.setDescriptionText(txt);
 		return o;
 	}
 

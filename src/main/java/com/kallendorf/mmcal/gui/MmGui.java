@@ -230,7 +230,7 @@ public class MmGui extends JFrame {
 		JMenuItem mntmUpload = new JMenuItem("Hochladen");
 		mntmUpload.addActionListener(arg0 -> menu_upload());
 
-		JMenuItem mntmExport = new JMenuItem("Word erzeugen");
+		JMenuItem mntmExport = new JMenuItem("Dokumente erzeugen");
 		mntmExport.addActionListener(arg0 -> menu_wexport());
 
 		JMenuItem mntmOptions = new JMenuItem("Optionen");
