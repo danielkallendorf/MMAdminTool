@@ -100,7 +100,11 @@ public class UploadUtil {
 		e.setStart(new EventDateTime().setDateTime(TimeConversion.toGDateTime(o.getStart())));
 		e.setEnd(new EventDateTime().setDateTime(TimeConversion.toGDateTime(o.getEnd())));
 		// TODO DescriptionWriting
-		e.setDescription(o.getDescription());
+		String description=o.getDescription();
+		if(o.getDescription()==null||o.getDescription().equals("")){
+			description=generateDescription(o);
+		}
+		e.setDescription(description);
 
 		List<EventAttendee> attendees = new ArrayList<>();
 		Set<String> idSet = idSet(o);
@@ -133,6 +137,17 @@ public class UploadUtil {
 		e.setExtendedProperties(ep);
 
 		return e;
+	}
+	
+	private static String generateDescription(ObjectGoDi o){
+		StringBuilder sb= new StringBuilder();
+		for (ObjectDienst d : o.getDienste()) {
+			sb.append(d.getDisplayName()).append("\n");
+			for (String p : d.getPersons()) {
+				sb.append("\t").append(p).append("\n");
+			}
+		}
+		return sb.toString();
 	}
 
 	public static Set<String> idSet(ObjectGoDi goDi) {

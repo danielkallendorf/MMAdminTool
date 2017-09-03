@@ -108,7 +108,7 @@ public class Updater {
 	}
 
 	private static void launchNextInstance(String oldJar, int nextVersion) throws IOException {
-		String command = "java -jar MMCal.jar remove=" + oldJar + " new="+ nextVersion;
+		String command = "java -jar MMCal_r"+nextVersion+".jar remove=" + oldJar + " new="+ nextVersion;
 		Runtime.getRuntime().exec(command);
 		System.out.println("Starting:"+command);
 		System.exit(0);
@@ -135,6 +135,26 @@ public class Updater {
 	static void deletOldFile(String filename){
 		File file = new File(filename);
 		file.delete();
+	}
+	
+	//TODO patchBatch
+	static void patchBath(int newVersion){
+		/*Linux like 
+		* cd -- "$(dirname "$BASH_SOURCE")"
+		* file="$(ls -v | tail -n 1)"
+		* java -jar $file
+		*/
+		
+		/*Windows .bat
+		* @echo off
+		* setlocal enableDelayedExpansion
+		* set max=0
+		* for /f "tokens=1* delims=-.0" %%A in ('dir /b /a-d MMCal_r*.jar') do if %%B gtr !max! set max=%%B
+		* java -jar MMCal_r%max%.jar
+		 */
+		
+		
+		
 	}
 	
 }
