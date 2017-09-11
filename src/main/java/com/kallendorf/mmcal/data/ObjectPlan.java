@@ -1,11 +1,14 @@
 package com.kallendorf.mmcal.data;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class ObjectPlan {
@@ -21,6 +24,27 @@ public class ObjectPlan {
 		this();
 		for (TemplateGoDi t: template.getGoDis()) {
 			goDis.add(new ObjectGoDi(t));
+		}
+	}
+	
+	public ObjectPlan(TemplatePlan template, LocalDateTime start){
+		this();
+		int i = start.get(WeekFields.ISO.weekOfYear());
+		int weekYear = LocalDateTime.now().get(WeekFields.ISO.weekOfYear());
+		int weekshift=i-weekYear;
+		if(template.getGoDis().get(0).getStartDay().getValue()<start.getDayOfWeek().getValue()) 
+			weekshift++;
+
+		DayOfWeek day=template.getGoDis().get(0).getStartDay();
+		for (TemplateGoDi t: template.getGoDis()) {
+			ObjectGoDi objectGoDi = new ObjectGoDi(t);
+			
+			if(day.compareTo(t.getStartDay())>0) 
+				weekshift++;
+			day=t.getStartDay();
+			
+			objectGoDi.setStart(objectGoDi.getStart().plusWeeks(weekshift));
+			goDis.add(objectGoDi);
 		}
 	}
 

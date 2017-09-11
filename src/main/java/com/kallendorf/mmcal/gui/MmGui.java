@@ -10,6 +10,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.swing.JFileChooser;
@@ -20,7 +24,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SpinnerDateModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.xml.bind.JAXBContext;
@@ -104,8 +110,21 @@ public class MmGui extends JFrame {
 	}
 
 	private void menu_loadTemplate(TemplatePlan t) {
-		ObjectPlan op= new ObjectPlan(t);
-		scrollPane.setViewportView(panelHoldPlan = new ObjectPlanPanel(op));
+		
+		SpinnerDateModel sModel = new SpinnerDateModel(new Date(), null, null, java.util.Calendar.DAY_OF_MONTH);
+		JSpinner spinner = new JSpinner(sModel);
+		spinner.setEditor(new JSpinner.DateEditor(spinner, new SimpleDateFormat("dd.MM.yy").toPattern()));
+		int option = JOptionPane.showOptionDialog(null, spinner, "Plan erstellen ab", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+		
+		if (option == JOptionPane.OK_OPTION)
+		{
+			Date d=(Date)spinner.getValue();
+			LocalDateTime ldt= LocalDateTime.ofInstant(d.toInstant(),ZoneId.systemDefault());
+			ObjectPlan op= new ObjectPlan(t,ldt);
+			scrollPane.setViewportView(panelHoldPlan = new ObjectPlanPanel(op));
+		}
+		
+		
 	}
 	
 
@@ -261,6 +280,7 @@ public class MmGui extends JFrame {
 
 
 	private void populateTemplateMenu(JMenu mntmTmp) {
+		
 		for (String s : TemplatePool.localPool.plaene.keySet()) {
 			JMenuItem jMenuItem = new JMenuItem(s);
 			jMenuItem.addActionListener(evt->menu_loadTemplate(TemplatePool.localPool.plaene.get(s)));
