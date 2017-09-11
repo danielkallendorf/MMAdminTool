@@ -3,12 +3,15 @@ package com.kallendorf.mmcal;
 import java.awt.Frame;
 import java.awt.HeadlessException;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -22,18 +25,17 @@ import com.kallendorf.mmcal.options.OptionsHandler;
 public class Updater {
 
 	private static String[] lastFileContents;
-	private static String versionFile="Version.txt";
+	private static String versionFile = "Version.txt";
 
-	
 	public static int getCurrentVersion() throws IOException {
-		File versionTxt= new File(versionFile);
-		if(!versionTxt.exists()){	
+		File versionTxt = new File(versionFile);
+		if (!versionTxt.exists()) {
 			return 0;
 		}
-		BufferedReader b= new BufferedReader(new InputStreamReader(new FileInputStream(versionTxt)));
-		String versionString=b.readLine();
+		BufferedReader b = new BufferedReader(new InputStreamReader(new FileInputStream(versionTxt)));
+		String versionString = b.readLine();
 		b.close();
-		int version=Integer.parseInt(versionString);
+		int version = Integer.parseInt(versionString);
 		return version;
 	}
 
@@ -86,9 +88,11 @@ public class Updater {
 			if (getUpdateVersion() > getCurrentVersion()) {
 				if (askForUpdate() == JOptionPane.YES_OPTION) {
 					MMAdminMain.gui.dispose();
-					download(getURL(), new File("MMCal_r"+getUpdateVersion()+".jar"));
+					download(getURL(), new File("MMCal_r" + getUpdateVersion() + ".jar"));
 					removeVersionTxt();
-					launchNextInstance(MMAdminMain.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString(),getUpdateVersion());
+					launchNextInstance(
+							MMAdminMain.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString(),
+							getUpdateVersion());
 				}
 			}
 		} catch (IOException | URISyntaxException e) {
@@ -108,53 +112,54 @@ public class Updater {
 	}
 
 	private static void launchNextInstance(String oldJar, int nextVersion) throws IOException {
-		String command = "java -jar MMCal_r"+nextVersion+".jar remove=" + oldJar + " new="+ nextVersion;
+		String command = "java -jar MMCal_r" + nextVersion + ".jar remove=" + oldJar + " new=" + nextVersion;
 		Runtime.getRuntime().exec(command);
-		System.out.println("Starting:"+command);
+		System.out.println("Starting:" + command);
 		System.exit(0);
 	}
-	
-	private static void removeVersionTxt(){
-		File f=new File(versionFile);
+
+	private static void removeVersionTxt() {
+		File f = new File(versionFile);
 		f.delete();
 	}
-	
-	static void createVersionFile(String version){
-		File f= new File(versionFile);
-		f.delete();
+
+	static void createVersionFile(int version) {
+		File f = new File(versionFile);
 		try {
 			f.createNewFile();
-			FileWriter w= new FileWriter(f);
-			w.write(version);
+			PrintWriter w = new PrintWriter(f);
+			w.print(version);
 			w.close();
-		} catch (IOException e) {			
+		} catch (IOException e) {
 			e.printStackTrace();
-		}	
+		}
 	}
-	
-	static void deletOldFile(String filename){
+
+	static void deletOldFile(String filename) {
 		File file = new File(filename);
 		file.delete();
 	}
-	
-	//TODO patchBatch
-	static void patchBath(int newVersion){
-		/*Linux like 
-		* cd -- "$(dirname "$BASH_SOURCE")"
-		* file="$(ls -v | tail -n 1)"
-		* java -jar $file
-		*/
-		
-		/*Windows .bat
-		* @echo off
-		* setlocal enableDelayedExpansion
-		* set max=0
-		* for /f "tokens=1* delims=-.0" %%A in ('dir /b /a-d MMCal_r*.jar') do if %%B gtr !max! set max=%%B
-		* java -jar MMCal_r%max%.jar
-		 */
-		
-		
-		
+
+	private static final File LAUNCH_WIN = new File("MMAdminTool.bat");
+	private static final File LAUNCH_OSX = new File("MMAdminTool.command");
+	private static final File LAUNCH_LNX = new File("MMAdminTool.sh");
+
+	public static void pachtLaunchFiles(int version) {
+		File[] files = { LAUNCH_WIN, LAUNCH_OSX, LAUNCH_LNX };
+		for (File file : files) {
+
+			try {
+				file.createNewFile();
+
+				PrintWriter p = new PrintWriter(file);
+				p.printf("java -jar MMCal_r%d.jar", version);
+				p.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
 	}
-	
+
 }

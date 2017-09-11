@@ -22,7 +22,9 @@ public class MMAdminMain {
 			} else if (args[i].startsWith("remove=")) {
 				Updater.deletOldFile(args[i].substring(7));
 			} else if (args[i].startsWith("new=")) {
-				Updater.createVersionFile(args[i].substring(4));
+				int nextVers=Integer.valueOf(args[i].substring(4));
+				Updater.createVersionFile(nextVers);
+				Updater.pachtLaunchFiles(nextVers);
 			}
 		}
 		
