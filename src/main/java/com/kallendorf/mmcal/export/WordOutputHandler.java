@@ -1,14 +1,10 @@
 package com.kallendorf.mmcal.export;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.IsoFields;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Formatter;
 import java.util.Iterator;
 import java.util.List;
