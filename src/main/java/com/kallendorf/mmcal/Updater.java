@@ -3,15 +3,13 @@ package com.kallendorf.mmcal;
 import java.awt.Frame;
 import java.awt.HeadlessException;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -43,9 +41,9 @@ public class Updater {
 		if (lastFileContents == null || lastFileContents.length == 0) {
 			fetchUpdateFileContent();
 		}
-		String updateVersString = lastFileContents[0];
-		System.out.println("updateVersString: " + updateVersString);
-		return Integer.valueOf(updateVersString);
+		String updateVersionString = lastFileContents[0];
+		System.out.println("updateVersString: " + updateVersionString);
+		return Integer.valueOf(updateVersionString.substring(9));
 	}
 
 	public static URL getURL() throws IOException {
@@ -85,14 +83,16 @@ public class Updater {
 
 	public static void update() {
 		try {
-			if (getUpdateVersion() > getCurrentVersion()) {
+			int updateVersion = getUpdateVersion();
+			int currentVersion = getCurrentVersion();
+			if (updateVersion > currentVersion) {
 				if (askForUpdate() == JOptionPane.YES_OPTION) {
 					MMAdminMain.gui.dispose();
-					download(getURL(), new File("MMCal_r" + getUpdateVersion() + ".jar"));
+					download(getURL(), new File("MMCal_r" + updateVersion + ".jar"));
 					removeVersionTxt();
 					launchNextInstance(
 							MMAdminMain.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString(),
-							getUpdateVersion());
+							updateVersion);
 				}
 			}
 		} catch (IOException | URISyntaxException e) {
@@ -135,9 +135,17 @@ public class Updater {
 		}
 	}
 
-	static void deletOldFile(String filename) {
-		File file = new File(filename);
-		file.delete();
+	static void deletOldFile(String uri) {
+		File file;
+		try {
+			URI uri2 = new URI(uri);
+			file = new File(uri2);
+			file.delete();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 
 	private static final File LAUNCH_WIN = new File("MMAdminTool.bat");

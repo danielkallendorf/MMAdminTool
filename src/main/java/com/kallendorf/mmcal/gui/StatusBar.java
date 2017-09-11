@@ -2,32 +2,20 @@ package com.kallendorf.mmcal.gui;
 
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.channels.ReadableByteChannel;
 
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.google.api.services.calendar.model.CalendarList;
 import com.google.api.services.calendar.model.CalendarListEntry;
-import com.kallendorf.mmcal.MMAdminMain;
+import com.kallendorf.mmcal.Updater;
 import com.kallendorf.mmcal.export.GoogleAuthHandler;
-import com.kallendorf.mmcal.options.OptionsHandler;
 
 public class StatusBar extends JPanel {
 
@@ -166,12 +154,11 @@ public class StatusBar extends JPanel {
 					MmGui.client = GoogleAuthHandler.getCalendarService();
 					CalendarList list = MmGui.client.calendarList().list().execute();
 					MmGui.idMap.put("MM", "primary");
-					
-					for (CalendarListEntry entry : list.getItems()){
+
+					for (CalendarListEntry entry : list.getItems()) {
 						MmGui.idMap.put(entry.getSummary(), entry.getId());
 						MmGui.namesMap.put(entry.getId(), entry.getSummary());
-					}	
-
+					}
 
 					setGoogleState(true);
 
@@ -188,57 +175,9 @@ public class StatusBar extends JPanel {
 			@Override
 			public void run() {
 				try {
-					File jar = new File(MMAdminMain.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-					String jarName = jar.getName();
-					String thisVersString = jarName.substring(7, jarName.length() - 4);
-					System.out.println("thisVersString: " + thisVersString);
-					int thisReleaseNr = Integer.valueOf(thisVersString);
-
-					URL url = OptionsHandler.getcRInfoPath().toURL();
-					BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-
-					String nextLine;
-					String out = "";
-					while ((nextLine = in.readLine()) != null) {
-						out += nextLine;
-					}
-					in.close();
-					String[] props = out.split(";");
-
-					String updateVersString = props[0].substring(9);
-					System.out.println("updateVersString: " + updateVersString);
-					int updateReleaseNr = Integer.valueOf(updateVersString);
-
+					Updater.fetchUpdateFileContent();
 					setDropboxState(true);
-					if (updateReleaseNr > thisReleaseNr) {
-						Frame frame = new Frame();
-
-						int n = JOptionPane.showConfirmDialog(frame, "Neue Version gefunden \n" + "Jetzt installieren?",
-								"Update: " + thisReleaseNr + "->" + updateVersString, JOptionPane.OK_CANCEL_OPTION);
-						frame.dispose();
-
-						if (n == 0) {
-							MMAdminMain.gui.dispose();
-							System.out.println("Downloading");
-							String dlURL = props[1].substring(6);
-							ReadableByteChannel cIn = Channels.newChannel(new URL(dlURL).openStream());
-							FileOutputStream fos = new FileOutputStream("MMCal_r" + updateReleaseNr + ".jar");
-							FileChannel cOut = fos.getChannel();
-							cOut.transferFrom(cIn, 0, Long.MAX_VALUE);
-							fos.flush();
-							fos.close();
-							cOut.close();
-
-							File bat = new File("start.bat");
-							FileWriter batfw = new FileWriter(bat);
-							batfw.write("java -jar MMCal_r" + updateReleaseNr + ".jar");
-							batfw.close();
-							String command = "java -jar MMCal_r" + updateReleaseNr + ".jar -old=" + thisReleaseNr;
-							Runtime.getRuntime().exec(command);
-							System.exit(0);
-						}
-					}
-
+					Updater.update();
 				} catch (StringIndexOutOfBoundsException e) {
 					setDropboxState(true);
 				} catch (Exception e) {

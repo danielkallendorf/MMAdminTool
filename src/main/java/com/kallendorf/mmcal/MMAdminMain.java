@@ -16,13 +16,20 @@ public class MMAdminMain {
 		for (int i = 0; i < args.length; i++) {
 			
 			if (args[i].equalsIgnoreCase("dbg")) {
+				System.out.println("DebugMode");
 				setDebugServer();
 			} else if (args[i].startsWith("file=")) {
+				System.out.println("File argument:");
 				filepath=args[i].substring(5);
+				System.out.println(filepath);
 			} else if (args[i].startsWith("remove=")) {
-				Updater.deletOldFile(args[i].substring(7));
+				String delFile = args[i].substring(7);
+				System.out.println("Deletion:");
+				System.out.println(delFile);
+				Updater.deletOldFile(delFile);
 			} else if (args[i].startsWith("new=")) {
 				int nextVers=Integer.valueOf(args[i].substring(4));
+				System.out.printf("New Version: %d%n",nextVers);
 				Updater.createVersionFile(nextVers);
 				Updater.pachtLaunchFiles(nextVers);
 			}
