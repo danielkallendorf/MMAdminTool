@@ -1,5 +1,6 @@
 package com.kallendorf.mmcal.gui;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -10,6 +11,7 @@ import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
@@ -30,6 +32,7 @@ public class ObjectDienstPanel extends AbstractHolderPanelComponent<ObjectDienst
 	private JButton btnDel;
 
 	public ObjectDienstPanel() {
+		setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0 };
@@ -145,5 +148,10 @@ public class ObjectDienstPanel extends AbstractHolderPanelComponent<ObjectDienst
 		
 		obj.setPersons(panelPers.generateItems());
 		return obj;
+	}
+	
+	@Override
+	public Insets getInsets() {
+		return new Insets(5, 5, 5, 5);
 	}
 }

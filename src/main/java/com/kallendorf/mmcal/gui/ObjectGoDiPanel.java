@@ -1,5 +1,6 @@
 package com.kallendorf.mmcal.gui;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -19,6 +20,7 @@ import java.util.Date;
 import java.util.Formatter;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -55,6 +57,7 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 	}
 
 	public ObjectGoDiPanel() {
+		setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[] { 0, 0, 0, 0 };
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -268,6 +271,11 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 			return date.compareTo(date2);
 		}
 		return super.compareTo(o);
+	}
+	
+	@Override
+	public Insets getInsets() {
+		return new Insets(5, 5, 5, 5);
 	}
 
 }
