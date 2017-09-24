@@ -44,7 +44,7 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 	private DynamicComboBox<TemplateGoDi> comboBox;
 	private JSpinner spinnerDate;
 	private JLabel lblWeekDay;
-	private AbstractHolderPanel<ObjectDienstPanel, ObjectDienst> panelHold;
+	private AbstractHolderPanel<ObjectDienstPanel, ObjectDienst> panelHoldDienste;
 	private JButton btnEdit;
 	private JTextField txtDescr;
 	private JButton btnDel;
@@ -90,7 +90,7 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 		gbc_comboBox.gridx = 0;
 		gbc_comboBox.gridy = 0;
 		add(comboBox, gbc_comboBox);
-		
+
 		btnDel = createDeleteButton("X");
 		GridBagConstraints gbc_btnDel = new GridBagConstraints();
 		gbc_btnDel.fill = GridBagConstraints.BOTH;
@@ -109,7 +109,7 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 		add(textFieldName, gbc_textFieldName);
 		textFieldName.setColumns(10);
 
-		panelHold = new AbstractHolderPanel<ObjectDienstPanel, ObjectDienst>() {
+		panelHoldDienste = new AbstractHolderPanel<ObjectDienstPanel, ObjectDienst>() {
 
 			private static final long serialVersionUID = 1L;
 
@@ -124,7 +124,7 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 		gbc_panel.fill = GridBagConstraints.BOTH;
 		gbc_panel.gridx = 1;
 		gbc_panel.gridy = 0;
-		add(panelHold, gbc_panel);
+		add(panelHoldDienste, gbc_panel);
 
 		spinnerDate = new JSpinner();
 		spinnerDate.setModel(new SpinnerDateModel(Calendar.getInstance().getTime(), null, null, Calendar.MILLISECOND));
@@ -152,6 +152,8 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 				f.format("%tA", spinnerDate.getValue());
 				lblWeekDay.setText(f.toString());
 				f.close();
+				if (holderPanel != null)
+					holderPanel.onComparableChanged(ObjectGoDiPanel.this);
 			}
 		});
 
@@ -222,17 +224,17 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 
 	private void onLoad(ObjectGoDi o) {
 		textFieldName.setText(o.getDisplayName());
-		
+
 		Date date = Date.from(o.getStart().atZone(ZoneId.systemDefault()).toInstant());
 		spinnerDate.setValue(date);
 
-		panelHold.removeAllPanelComponents();
+		panelHoldDienste.removeAllPanelComponents();
 		o.getDienste().stream().forEachOrdered(p -> {
 			ObjectDienstPanel op = new ObjectDienstPanel();
 			op.set(p);
-			panelHold.addItem(op);
+			panelHoldDienste.addItem(op);
 		});
-		panelHold.revalidate();
+		panelHoldDienste.revalidate();
 	}
 
 	@Override
@@ -240,21 +242,32 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 		TemplateGoDi t = (TemplateGoDi) comboBox.getSelectedItem();
 
 		ObjectGoDi obj = new ObjectGoDi(t);
-		
-		if(!textFieldName.getText().equals(""))
+
+		if (!textFieldName.getText().equals(""))
 			obj.setDisplayName(textFieldName.getText());
-		
+
 		Date d = (Date) spinnerDate.getValue();
 		LocalDateTime ldt = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 		obj.setStart(ldt);
 		obj.setDuration(t.getDuration());
-		
-		obj.setDienste(panelHold.generateItems());
+
+		obj.setDienste(panelHoldDienste.generateItems());
 		String txt = txtDescr.getText();
 		if (txt.equals("") || !txtDescr.isEnabled())
 			txt = null;
 		obj.setDescriptionText(txt);
 		return obj;
+	}
+
+	@Override
+	public int compareTo(AbstractHolderPanelComponent<ObjectGoDi> o) {
+		if (o instanceof ObjectGoDiPanel) {
+			ObjectGoDiPanel op = (ObjectGoDiPanel) o;
+			Date date = (Date) spinnerDate.getValue();
+			Date date2 = (Date) op.spinnerDate.getValue();
+			return date.compareTo(date2);
+		}
+		return super.compareTo(o);
 	}
 
 }

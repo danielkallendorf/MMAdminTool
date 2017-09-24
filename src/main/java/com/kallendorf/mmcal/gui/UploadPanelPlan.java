@@ -117,6 +117,7 @@ public class UploadPanelPlan extends JFrame {
 	private void onUpdate() {
 		UploadPlan u = new UploadPlan();
 		u.setUploadGoDis(holderPanel.generateItems());
+		Uploader.prepareUpload(u);
 		Uploader.upload(u);
 	}
 
