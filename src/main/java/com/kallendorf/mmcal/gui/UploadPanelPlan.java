@@ -39,13 +39,11 @@ public class UploadPanelPlan extends JFrame {
 		JPanel topBar = new JPanel();
 
 		spinnerStart = new JSpinner();
-		spinnerStart.setModel(
-				new SpinnerDateModel(new Date(), new Date(946681200000L), null, Calendar.DAY_OF_YEAR));
+		spinnerStart.setModel(new SpinnerDateModel(new Date(), new Date(946681200000L), null, Calendar.DAY_OF_YEAR));
 		topBar.add(spinnerStart);
 
 		spinnerEnd = new JSpinner();
-		spinnerEnd.setModel(
-				new SpinnerDateModel(new Date(), new Date(946681200000L), null, Calendar.DAY_OF_YEAR));
+		spinnerEnd.setModel(new SpinnerDateModel(new Date(), new Date(946681200000L), null, Calendar.DAY_OF_YEAR));
 		topBar.add(spinnerEnd);
 
 		JButton btnReset = new JButton("Reset");
@@ -60,10 +58,10 @@ public class UploadPanelPlan extends JFrame {
 		});
 		topBar.add(btnUpdate);
 		getContentPane().add(topBar, BorderLayout.NORTH);
-		
+
 		scrollPane = new JScrollPane();
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
-		
+
 		holderPanel = new AbstractHolderPanel<UploadGoDiPanel, UploadGoDi>() {
 			/**
 			 * 
@@ -74,9 +72,9 @@ public class UploadPanelPlan extends JFrame {
 				return (UploadGoDiPanel) null;
 			}
 		};
-		holderPanel.remove(holderPanel.getComponentCount()-1);
+		holderPanel.remove(holderPanel.getComponentCount() - 1);
 		scrollPane.setViewportView(holderPanel);
-		setVisible(true);		
+		setVisible(true);
 	}
 
 	private void onReset() {
@@ -107,7 +105,9 @@ public class UploadPanelPlan extends JFrame {
 
 		holderPanel.removeAllPanelComponents();
 		for (UploadGoDi uploadGoDi : list) {
-			holderPanel.addItem(new UploadGoDiPanel(uploadGoDi));
+			UploadGoDiPanel component = new UploadGoDiPanel(uploadGoDi);
+			holderPanel.addItem(component);
+			holderPanel.onComparableChanged(component);
 		}
 		revalidate();
 		repaint();
@@ -138,8 +138,8 @@ public class UploadPanelPlan extends JFrame {
 				protected void onDelete() {
 					UploadGoDiPanel p = ((UploadGoDiPanel) getParent());
 					ObjectGoDi o = objectPanel.get();
-					//p.remove(objectPanel);
-					
+					// p.remove(objectPanel);
+
 					p.objectPanel = new EmptyPanel(o.getDisplayName() + " " + o.getStart());
 					p.add(p.objectPanel);
 					super.onDelete();
@@ -167,6 +167,16 @@ public class UploadPanelPlan extends JFrame {
 				return null;
 			}
 
+		}
+
+		@Override
+		public int compareTo(AbstractHolderPanelComponent<UploadGoDi> o) {
+			// TODO Auto-generated method stub
+			if (o instanceof UploadGoDiPanel) {
+				UploadGoDiPanel u = (UploadGoDiPanel) o;
+				return this.objectPanel.compareTo(u.objectPanel);
+			}
+			return 0;
 		}
 	}
 }
