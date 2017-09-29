@@ -63,7 +63,7 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 		gridBagLayout.rowHeights = new int[] { 0, 0, 0, 0, 0, 0, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 0.0, Double.MIN_VALUE };
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE };
-		setLayout(gridBagLayout);
+		contentPane.setLayout(gridBagLayout);
 
 		// TODO: Erstauswahl
 		comboBox = new DynamicComboBox<TemplateGoDi>() {
@@ -92,7 +92,7 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 		gbc_comboBox.fill = GridBagConstraints.HORIZONTAL;
 		gbc_comboBox.gridx = 0;
 		gbc_comboBox.gridy = 0;
-		add(comboBox, gbc_comboBox);
+		contentPane.add(comboBox, gbc_comboBox);
 
 		btnDel = createDeleteButton("X");
 		GridBagConstraints gbc_btnDel = new GridBagConstraints();
@@ -101,7 +101,7 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 		gbc_btnDel.insets = new Insets(0, 0, 5, 0);
 		gbc_btnDel.gridx = 2;
 		gbc_btnDel.gridy = 0;
-		add(btnDel, gbc_btnDel);
+		contentPane.add(btnDel, gbc_btnDel);
 
 		textFieldName = new JTextField();
 		GridBagConstraints gbc_textFieldName = new GridBagConstraints();
@@ -109,7 +109,7 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 		gbc_textFieldName.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textFieldName.gridx = 0;
 		gbc_textFieldName.gridy = 1;
-		add(textFieldName, gbc_textFieldName);
+		contentPane.add(textFieldName, gbc_textFieldName);
 		textFieldName.setColumns(10);
 
 		panelHoldDienste = new AbstractHolderPanel<ObjectDienstPanel, ObjectDienst>() {
@@ -127,7 +127,7 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 		gbc_panel.fill = GridBagConstraints.BOTH;
 		gbc_panel.gridx = 1;
 		gbc_panel.gridy = 0;
-		add(panelHoldDienste, gbc_panel);
+		contentPane.add(panelHoldDienste, gbc_panel);
 
 		spinnerDate = new JSpinner();
 		spinnerDate.setModel(new SpinnerDateModel(Calendar.getInstance().getTime(), null, null, Calendar.MILLISECOND));
@@ -137,7 +137,7 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 		gbc_spinnerDate.insets = new Insets(0, 0, 5, 5);
 		gbc_spinnerDate.gridx = 0;
 		gbc_spinnerDate.gridy = 2;
-		add(spinnerDate, gbc_spinnerDate);
+		contentPane.add(spinnerDate, gbc_spinnerDate);
 
 		lblWeekDay = new JLabel("tag");
 
@@ -145,7 +145,7 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 		gbc_lblWeekDay.insets = new Insets(0, 0, 5, 5);
 		gbc_lblWeekDay.gridx = 0;
 		gbc_lblWeekDay.gridy = 3;
-		add(lblWeekDay, gbc_lblWeekDay);
+		contentPane.add(lblWeekDay, gbc_lblWeekDay);
 
 		spinnerDate.addChangeListener(new ChangeListener() {
 
@@ -180,7 +180,7 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 		gbc_btnEigenschaften.insets = new Insets(0, 0, 5, 5);
 		gbc_btnEigenschaften.gridx = 0;
 		gbc_btnEigenschaften.gridy = 4;
-		add(btnEdit, gbc_btnEigenschaften);
+		contentPane.add(btnEdit, gbc_btnEigenschaften);
 		btnEdit.setToolTipText("Dauer: " + comboBox.getSelectedItem());
 
 		txtDescr = new JTextField();
@@ -190,7 +190,7 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 		gbc_txtDescr.fill = GridBagConstraints.HORIZONTAL;
 		gbc_txtDescr.gridx = 0;
 		gbc_txtDescr.gridy = 5;
-		add(txtDescr, gbc_txtDescr);
+		contentPane.add(txtDescr, gbc_txtDescr);
 		txtDescr.setColumns(10);
 		txtDescr.addFocusListener(new FocusAdapter() {
 
