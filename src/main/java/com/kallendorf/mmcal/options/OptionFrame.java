@@ -32,7 +32,7 @@ public class OptionFrame extends JFrame {
 	 */
 	public OptionFrame() {
 		setTitle("Optionen");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -75,7 +75,7 @@ public class OptionFrame extends JFrame {
 		gbc_textField_WordDefaultPath.gridy = 1;
 		contentPane.add(textField_WordDefaultPath, gbc_textField_WordDefaultPath);
 		textField_WordDefaultPath.setColumns(10);
-		JLabel lblHeight = new JLabel("Fensterhöhe:");
+		JLabel lblHeight = new JLabel("Fensterhï¿½he:");
 		GridBagConstraints gbc_lblHeight = new GridBagConstraints();
 		gbc_lblHeight.anchor = GridBagConstraints.EAST;
 		gbc_lblHeight.insets = new Insets(0, 0, 5, 5);
@@ -125,7 +125,7 @@ public class OptionFrame extends JFrame {
 				} catch (URISyntaxException e) {
 					JOptionPane.showMessageDialog(OptionFrame.this,
 							"\"" + textField_CRInfoPath.getText() + "\"\n"
-									+ " ist keine zulässig Eingabe für \"CurrentRelase.info Pfad\"",
+									+ " ist keine zulï¿½ssig Eingabe fï¿½r \"CurrentRelase.info Pfad\"",
 							"Fehlerhafte Eingabe", JOptionPane.ERROR_MESSAGE);
 					failed = true;
 				}
@@ -134,7 +134,7 @@ public class OptionFrame extends JFrame {
 				} catch (URISyntaxException e) {
 					JOptionPane.showMessageDialog(OptionFrame.this,
 							"\"" + textField_WordDefaultPath.getText() + "\"\n"
-									+ " ist keine zulässig Eingabe für \"Word Standard Ordner\"",
+									+ " ist keine zulï¿½ssig Eingabe fï¿½r \"Word Standard Ordner\"",
 							"Fehlerhafte Eingabe", JOptionPane.ERROR_MESSAGE);
 					failed = true;
 				} catch (IllegalArgumentException e) {
