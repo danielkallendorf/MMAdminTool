@@ -99,7 +99,7 @@ public class UploadUtil {
 		e.setSummary(o.getDisplayName());
 		e.setStart(new EventDateTime().setDateTime(TimeConversion.toGDateTime(o.getStart())));
 		e.setEnd(new EventDateTime().setDateTime(TimeConversion.toGDateTime(o.getEnd())));
-		// TODO DescriptionWriting
+
 		String description=o.getDescription();
 		if(o.getDescription()==null||o.getDescription().equals("")){
 			description=generateDescription(o);
