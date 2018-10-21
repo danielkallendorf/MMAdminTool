@@ -35,7 +35,7 @@ public class TxtFieldPerson extends AbstractHolderPanelComponent<String> {
 				if (e.getKeyCode() == KeyEvent.VK_RIGHT && caretPosition == length) {
 					Collection<String> col = new HashSet<String>();
 					col.addAll(MmGui.idMap.keySet());
-					col.removeIf(s -> !s.startsWith(textField.getText()));
+					col.removeIf(s -> !s.toLowerCase().startsWith(textField.getText().toLowerCase()));
 
 					String elem = col.iterator().next();
 
