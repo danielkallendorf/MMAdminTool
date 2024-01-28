@@ -221,3 +221,4 @@ pip-log.txt
 
 # Ignore Gradle build output directory
 build
+tokens/StoredCredential
