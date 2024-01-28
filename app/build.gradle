@@ -40,10 +40,20 @@ application {
     version = '1.0'
 }
 
-tasks.named('test') {
-    // Use TestNG for unit tests.
-    useTestNG()
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.kallendorf.mmcal.MMAdminMain'
+    }
+
+    // Will include every single one of your dependencies, project or not
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+
+
 
 
 
