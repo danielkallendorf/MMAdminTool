@@ -14,9 +14,11 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +42,7 @@ public class GoogleAuthHandler {
 	 * Global instance of the scopes required by this quickstart.
 	 * If modifying these scopes, delete your previously saved tokens/ folder.
 	 */
-	private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
+	private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
 	// private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
 
 	/**
@@ -80,6 +82,12 @@ public class GoogleAuthHandler {
 				.setApplicationName(APPLICATION_NAME)
 				.build();
 		return service;
+	}
+
+	public static void resetTokens() {
+		for (File file : new java.io.File(TOKENS_DIRECTORY_PATH).listFiles())
+			if (!file.isDirectory())
+				file.delete();
 	}
 
 }

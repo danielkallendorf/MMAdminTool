@@ -2,6 +2,7 @@ package com.kallendorf.mmcal.gui;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -10,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.google.api.services.calendar.model.CalendarList;
@@ -153,8 +155,22 @@ public class StatusBar extends JPanel {
 				try {
 					MmGui.client = GoogleAuthHandler.getCalendarService();
 					CalendarList list = MmGui.client.calendarList().list().execute();
-					MmGui.idMap.put("MM", "primary");
 
+					if (list.getItems().size() < 5) {
+						Frame frame = new Frame();
+						int n = JOptionPane.showConfirmDialog(frame,
+								"Es wurden nur sehr wenige Unter-Kalender gefunden.\nIst das der richtige Google-Account? Soll der Login zurückgesetzt werden?",
+								"",
+								JOptionPane.YES_NO_OPTION);
+						if (n == JOptionPane.YES_OPTION) {
+							GoogleAuthHandler.resetTokens();
+							MmGui.client = GoogleAuthHandler.getCalendarService();
+							list = MmGui.client.calendarList().list().execute();
+						}
+
+					}
+
+					MmGui.idMap.put("MM", "primary");
 					for (CalendarListEntry entry : list.getItems()) {
 						MmGui.idMap.put(entry.getSummary(), entry.getId());
 						MmGui.namesMap.put(entry.getId(), entry.getSummary());
