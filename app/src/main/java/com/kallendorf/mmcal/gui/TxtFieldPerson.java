@@ -21,7 +21,7 @@ public class TxtFieldPerson extends AbstractHolderPanelComponent<String> {
 		textField = new JTextField();
 		add(textField);
 		textField.setColumns(20);
-		
+
 		JButton btnDel = createDeleteButton("X");
 		add(btnDel);
 		textField.addKeyListener(new KeyAdapter() {
@@ -37,20 +37,22 @@ public class TxtFieldPerson extends AbstractHolderPanelComponent<String> {
 					col.addAll(MmGui.idMap.keySet());
 					col.removeIf(s -> !s.toLowerCase().startsWith(textField.getText().toLowerCase()));
 
-					String elem = col.iterator().next();
+					if (col.iterator().hasNext()) {
+						String elem = col.iterator().next();
 
-					for (int i = caretPosition; i < elem.length(); i++) {
-						final String newText = elem.substring(0, i);
-						if (col.removeIf(s -> !s.startsWith(newText))) {
-							textField.setText(elem.substring(0, i - 1));
-							if (!recognized)
-								performCheck();
-							return;
+						for (int i = caretPosition; i < elem.length(); i++) {
+							final String newText = elem.substring(0, i);
+							if (col.removeIf(s -> !s.startsWith(newText))) {
+								textField.setText(elem.substring(0, i - 1));
+								if (!recognized)
+									performCheck();
+								return;
+							}
 						}
+						textField.setText(elem);
+						if (!recognized)
+							performCheck();
 					}
-					textField.setText(elem);
-					if (!recognized)
-						performCheck();
 				}
 			}
 		});
@@ -77,11 +79,11 @@ public class TxtFieldPerson extends AbstractHolderPanelComponent<String> {
 	}
 
 	public void performCheck() {
-		if (MmGui.idMap.containsKey(textField.getText())) {
+		if (MmGui.idMap.containsKey(textField.getText()) || textField.getText().equals("")) {
 			textField.setBackground(Color.white);
 			recognized = true;
 		} else {
-			textField.setBackground(new Color(255, 60, 60));
+			textField.setBackground(Color.lightGray);
 			recognized = false;
 		}
 	}
