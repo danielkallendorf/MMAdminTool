@@ -171,11 +171,19 @@ public class StatusBar extends JPanel {
 					}
 
 					MmGui.idMap.put("MM", "primary");
-					for (CalendarListEntry entry : list.getItems()) {
-						MmGui.idMap.put(entry.getSummary(), entry.getId());
-						MmGui.namesMap.put(entry.getId(), entry.getSummary());
-					}
+					while (true) {
+						for (CalendarListEntry entry : list.getItems()) {
+							MmGui.idMap.put(entry.getSummary(), entry.getId());
+							MmGui.namesMap.put(entry.getId(), entry.getSummary());
+						}
 
+						if (list.getNextPageToken() != null) {
+							String nextPageToken = list.getNextPageToken();
+							list = MmGui.client.calendarList().list().setPageToken(nextPageToken).execute();
+						} else {
+							break;
+						}
+					}
 					setGoogleState(true);
 
 				} catch (Exception e) {
