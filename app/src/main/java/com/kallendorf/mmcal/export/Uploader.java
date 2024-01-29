@@ -15,6 +15,7 @@ import com.google.api.client.googleapis.json.GoogleJsonError;
 import com.google.api.client.http.HttpHeaders;
 import com.google.api.services.calendar.CalendarRequest;
 import com.google.api.services.calendar.model.AclRule;
+import com.google.api.services.calendar.model.Calendar;
 import com.google.api.services.calendar.model.AclRule.Scope;
 import com.google.api.services.calendar.model.CalendarListEntry;
 import com.google.api.services.calendar.model.Event;
@@ -33,7 +34,7 @@ public class Uploader {
 		if (!names.isEmpty()) {
 			String message = "Die folgenden Personen exitsieren (noch) nicht. Erstellen?";
 			for (String string : names) {
-				message.concat(string);
+				message = message.concat(string+"; ");
 			}
 			int ret = JOptionPane.showConfirmDialog(MMAdminMain.gui, message, "Erstellen?",
 					JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -42,7 +43,7 @@ public class Uploader {
 
 			for (String name : names) {
 				try {
-					com.google.api.services.calendar.model.Calendar calReq = new com.google.api.services.calendar.model.Calendar();
+					Calendar calReq = new Calendar();
 					calReq.setSummary(name);
 					calReq.setDescription("Persönlicher Kalender, nur mit Gottesdiensten von " + name + ".");
 					String id = MmGui.client.calendars().insert(calReq).execute().getId();
