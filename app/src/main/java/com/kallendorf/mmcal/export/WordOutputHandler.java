@@ -34,13 +34,12 @@ import com.kallendorf.mmcal.data.ObjectGoDi;
 import com.kallendorf.mmcal.data.ObjectPlan;
 import com.kallendorf.mmcal.options.OptionsHandler;
 
-
 public class WordOutputHandler {
-	
+
 	private static WordprocessingMLPackage doc;
 	private static MainDocumentPart mainPart;
 	private static ObjectFactory factory;
-	
+
 	public static void create(ObjectPlan plan) {
 
 		List<ObjectGoDi> godis = plan.getGoDis();
@@ -55,10 +54,10 @@ public class WordOutputHandler {
 		formatter.close();
 
 		fc.setSelectedFile(new File(path));
-		
+
 		FileNameExtensionFilter docxFilter = new FileNameExtensionFilter("Word-Dokument (*.docx)", "docx");
 		FileNameExtensionFilter pdfFilter = new FileNameExtensionFilter("PDF (*.pdf)", "pdf");
-		
+
 		fc.setFileFilter(docxFilter);
 		fc.addChoosableFileFilter(pdfFilter);
 		fc.setMultiSelectionEnabled(false);
@@ -71,12 +70,11 @@ public class WordOutputHandler {
 		String filePath = file.getAbsolutePath();
 		FileNameExtensionFilter filter = (FileNameExtensionFilter) fc.getFileFilter();
 		if (!filter.accept(file)) {
-			file = new File(filePath + "."+filter.getExtensions()[0]);
+			file = new File(filePath + "." + filter.getExtensions()[0]);
 		}
 
-		
-		//Create File
-		
+		// Create File
+
 		try {
 			doc = WordprocessingMLPackage.createPackage();
 		} catch (InvalidFormatException e1) {
@@ -85,20 +83,21 @@ public class WordOutputHandler {
 		mainPart = doc.getMainDocumentPart();
 		factory = Context.getWmlObjectFactory();
 
-		int cellWidth = new Double(Math
-				.floor((doc.getDocumentModel().getSections().get(0).getPageDimensions().getWritableWidthTwips() / 4)))
-						.intValue();
+		int cellWidth = Double
+				.valueOf(Math.floor(
+						(doc.getDocumentModel().getSections().get(0).getPageDimensions().getWritableWidthTwips() / 4)))
+				.intValue();
 
 		Tbl tbl = TblFactory.createTable(1, 4, cellWidth);
 
 		Tr head = factory.createTr();
-		addText(head,"KW " + kw + ":", "", "", "");
+		addText(head, "KW " + kw + ":", "", "", "");
 		tbl.getContent().add(head);
-		
-		Tr blank= factory.createTr();
-		addText(blank, "","","","");
+
+		Tr blank = factory.createTr();
+		addText(blank, "", "", "", "");
 		tbl.getContent().add(blank);
-		
+
 		DateTimeFormatter sdf = DateTimeFormatter.ofPattern("EEEE, 'den' dd.MM.yyyy 'um' HH:mm");
 
 		for (ObjectGoDi goDi : godis) {
@@ -110,11 +109,11 @@ public class WordOutputHandler {
 				for (Iterator<String> pers = dienst.getPersons().iterator(); pers.hasNext();) {
 					String p0 = pers.next();
 					String p1 = pers.hasNext() ? pers.next() : "";
-					
+
 					Tr tr = factory.createTr();
-					addText(tr,dateString, dienstString, p0, p1);
+					addText(tr, dateString, dienstString, p0, p1);
 					tbl.getContent().add(tr);
-					
+
 					dateString = "";
 					dienstString = "";
 				}
@@ -123,14 +122,14 @@ public class WordOutputHandler {
 		mainPart.getContent().add(tbl);
 
 		try {
-			FileOutputStream fos=new FileOutputStream(file);
-			if(filter==docxFilter){
+			FileOutputStream fos = new FileOutputStream(file);
+			if (filter == docxFilter) {
 				Docx4J.save(doc, fos);
-			}else if(filter== pdfFilter){
-				FOSettings settings=Docx4J.createFOSettings();
+			} else if (filter == pdfFilter) {
+				FOSettings settings = Docx4J.createFOSettings();
 				settings.setWmlPackage(doc);
 				Docx4J.toFO(settings, fos, 0);
-			}	
+			}
 			fos.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -138,7 +137,7 @@ public class WordOutputHandler {
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
-	
+
 	private static void setCellText(Tc tc, String s) {
 		Text text = factory.createText();
 		text.setValue(s);

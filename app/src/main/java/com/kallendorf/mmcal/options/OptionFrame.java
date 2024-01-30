@@ -75,7 +75,7 @@ public class OptionFrame extends JFrame {
 		gbc_textField_WordDefaultPath.gridy = 1;
 		contentPane.add(textField_WordDefaultPath, gbc_textField_WordDefaultPath);
 		textField_WordDefaultPath.setColumns(10);
-		JLabel lblHeight = new JLabel("Fensterh�he:");
+		JLabel lblHeight = new JLabel("Fensterhöhe:");
 		GridBagConstraints gbc_lblHeight = new GridBagConstraints();
 		gbc_lblHeight.anchor = GridBagConstraints.EAST;
 		gbc_lblHeight.insets = new Insets(0, 0, 5, 5);
@@ -84,7 +84,7 @@ public class OptionFrame extends JFrame {
 		contentPane.add(lblHeight, gbc_lblHeight);
 		spinner_Height = new JSpinner();
 		spinner_Height.setModel(
-				new SpinnerNumberModel(new Integer(OptionsHandler.getHeight()), new Integer(0), null, new Integer(20)));
+				new SpinnerNumberModel(Integer.valueOf(OptionsHandler.getHeight()), 0, null, 20));
 		GridBagConstraints gbc_spinner_Height = new GridBagConstraints();
 		gbc_spinner_Height.fill = GridBagConstraints.HORIZONTAL;
 		gbc_spinner_Height.insets = new Insets(0, 0, 5, 5);
@@ -100,7 +100,7 @@ public class OptionFrame extends JFrame {
 		contentPane.add(lblWidth, gbc_lblWidth);
 		spinner_Width = new JSpinner();
 		spinner_Width.setModel(
-				new SpinnerNumberModel(new Integer(OptionsHandler.getWidth()), new Integer(0), null, new Integer(20)));
+				new SpinnerNumberModel(Integer.valueOf(OptionsHandler.getWidth()), 0, null, 20));
 		GridBagConstraints gbc_spinner_Width = new GridBagConstraints();
 		gbc_spinner_Width.fill = GridBagConstraints.HORIZONTAL;
 		gbc_spinner_Width.insets = new Insets(0, 0, 5, 5);
@@ -125,7 +125,7 @@ public class OptionFrame extends JFrame {
 				} catch (URISyntaxException e) {
 					JOptionPane.showMessageDialog(OptionFrame.this,
 							"\"" + textField_CRInfoPath.getText() + "\"\n"
-									+ " ist keine zul�ssig Eingabe f�r \"CurrentRelase.info Pfad\"",
+									+ " ist keine zulässig Eingabe für \"CurrentRelase.info Pfad\"",
 							"Fehlerhafte Eingabe", JOptionPane.ERROR_MESSAGE);
 					failed = true;
 				}
@@ -134,7 +134,7 @@ public class OptionFrame extends JFrame {
 				} catch (URISyntaxException e) {
 					JOptionPane.showMessageDialog(OptionFrame.this,
 							"\"" + textField_WordDefaultPath.getText() + "\"\n"
-									+ " ist keine zul�ssig Eingabe f�r \"Word Standard Ordner\"",
+									+ " ist keine zulässig Eingabe für \"Word Standard Ordner\"",
 							"Fehlerhafte Eingabe", JOptionPane.ERROR_MESSAGE);
 					failed = true;
 				} catch (IllegalArgumentException e) {
