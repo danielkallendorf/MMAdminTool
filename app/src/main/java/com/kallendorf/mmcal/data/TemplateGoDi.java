@@ -11,8 +11,8 @@ import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlElement;
 
 public class TemplateGoDi {
-	private String listName = "#defaultName";
-	private String displayName = "#defaultDisplayName";
+	private String listName = "";
+	private String displayName = "";
 
 	private Duration duration = Duration.ofHours(1);
 	private DayOfWeek startDay;

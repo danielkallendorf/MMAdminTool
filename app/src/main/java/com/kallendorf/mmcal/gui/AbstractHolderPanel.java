@@ -100,29 +100,30 @@ public abstract class AbstractHolderPanel<T extends AbstractHolderPanelComponent
 	public void onComparableChanged(T focusedItem) {
 
 		EventQueue.invokeLater(() -> {
-			int i = items.indexOf(focusedItem);
+			int currentIndex = items.indexOf(focusedItem);
 
-			int j = 0;
-			if (i != -1) {
-				while (items.get(j) == focusedItem || items.get(j).compareTo(focusedItem) < 0) {
-					j++;
+			int pivot = 0;
+			if (currentIndex != -1) {
+				while (pivot < items.size()
+						&& (items.get(pivot) == focusedItem || items.get(pivot).compareTo(focusedItem) < 0)) {
+					pivot++;
 				}
 			}
-			if(j>i)j--;
-			
-			moveItem(i, j);
+			if (pivot > currentIndex)
+				pivot--;
+
+			moveItem(currentIndex, pivot);
 
 			revalidate();
 			repaint();
 			focusedItem.revalidate();
-			
-			EventQueue.invokeLater(()->{
+
+			EventQueue.invokeLater(() -> {
 				Rectangle bounds2 = focusedItem.getBounds();
 				scrollRectToVisible(bounds2);
-				});
+			});
 		});
-		
-		
+
 	}
 
 	public void moveItem(int from, int to) {

@@ -81,7 +81,9 @@ public class ObjectGoDiPanel extends AbstractHolderPanelComponent<ObjectGoDi> {
 			public void itemStateChanged(ItemEvent e) {
 				if (e.getStateChange() == ItemEvent.SELECTED) {
 					TemplateGoDi t = (TemplateGoDi) e.getItem();
-					ObjectGoDi o = new ObjectGoDi(t);
+					Date d = (Date) spinnerDate.getValue();
+					LocalDateTime ldt = d.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+					ObjectGoDi o = new ObjectGoDi(t,ldt);
 					ObjectGoDiPanel.this.onLoad(o);
 				}
 			}

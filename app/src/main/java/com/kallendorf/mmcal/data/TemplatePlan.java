@@ -8,7 +8,7 @@ import jakarta.xml.bind.annotation.XmlElementWrapper;
 
 public class TemplatePlan {
 	private List<TemplateGoDi> goDis = new ArrayList<TemplateGoDi>();
-	private String listName = "#defaultName";
+	private String listName = "";
 
 	public String getListName() {
 		return listName;
