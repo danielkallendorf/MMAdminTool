@@ -9,12 +9,13 @@ import java.util.Formatter;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.WindowConstants;
 
 import org.docx4j.Docx4J;
-import org.docx4j.convert.out.FOSettings;
 import org.docx4j.jaxb.Context;
 import org.docx4j.model.table.TblFactory;
 import org.docx4j.openpackaging.exceptions.InvalidFormatException;
@@ -66,6 +67,14 @@ public class WordOutputHandler {
 			return;
 		}
 		File file = fc.getSelectedFile();
+
+		JOptionPane pane = new JOptionPane("Wird erstellt. Bitte warten.");
+		JDialog dialog = pane.createDialog(null, "Warten");
+		dialog.setModal(false);
+		dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		dialog.setAlwaysOnTop(true);
+		dialog.setVisible(true);
+
 
 		String filePath = file.getAbsolutePath();
 		FileNameExtensionFilter filter = (FileNameExtensionFilter) fc.getFileFilter();
@@ -126,16 +135,17 @@ public class WordOutputHandler {
 			if (filter == docxFilter) {
 				Docx4J.save(doc, fos);
 			} else if (filter == pdfFilter) {
-				FOSettings settings = Docx4J.createFOSettings();
-				settings.setWmlPackage(doc);
-				Docx4J.toFO(settings, fos, 0);
+				Docx4J.toPDF(doc, fos);
 			}
 			fos.close();
+			dialog.dispose();
 		} catch (Exception e) {
 			e.printStackTrace();
+			dialog.dispose();
 			JOptionPane.showMessageDialog(MMAdminMain.gui, "Datei noch geöffnet?", "Speichern Fehlgeschlagen",
 					JOptionPane.ERROR_MESSAGE);
 		}
+
 	}
 
 	private static void setCellText(Tc tc, String s) {

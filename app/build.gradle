@@ -23,13 +23,15 @@ dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:31.1-jre'
 
-    implementation group: 'org.docx4j', name: 'docx4j', version: '6.1.2'
+    implementation group: 'org.docx4j', name: 'docx4j-JAXB-ReferenceImpl', version: '11.4.11'
+    implementation group: 'org.docx4j', name: 'docx4j-export-fo', version: '11.4.11'
 
     implementation 'com.google.api-client:google-api-client:2.0.0'
     implementation 'com.google.oauth-client:google-oauth-client-jetty:1.34.1'
     implementation 'com.google.apis:google-api-services-calendar:v3-rev20220715-2.0.0'
-    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
-    implementation 'com.sun.xml.bind:jaxb-impl:4.0.3'
+    //implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
+    //implementation 'com.sun.xml.bind:jaxb-impl:4.0.3'
+    //implementation 'ch.qos.logback:logback-classic:1.5.3'
     }
 
 application {
@@ -55,6 +57,10 @@ jar {
     }
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    jar {
+        archivesBaseName = 'MMCal'
+        archiveVersion = 'r25'
+    }
 }
 
 
